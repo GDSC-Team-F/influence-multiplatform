@@ -50,7 +50,7 @@ actual fun platformModule(): Module {
                         create = false,
                         error = null,
                     )
-                    requireNotNull(documentDirectory).path + "/$APP_DATASTORE"
+                    requireNotNull(documentDirectory).path + "/$APP_DATASTORE.preferences_pb"
                 }
             )
         }
