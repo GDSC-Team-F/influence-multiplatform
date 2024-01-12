@@ -2,12 +2,15 @@ package org.gdsc.teamf.influence.viewmodel
 
 import org.gdsc.teamf.influence.data.Friend
 import org.gdsc.teamf.influence.data.LoadState
+import org.gdsc.teamf.influence.data.api.PointApi
 import org.orbitmvi.orbit.Container
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.reduce
 
 
-class VaccineScreenViewModel : PlatformViewModel<VaccineScreenViewModel.State, VaccineScreenViewModel.SideEffect>() {
+class VaccineScreenViewModel(
+    private val pointApi: PointApi
+) : PlatformViewModel<VaccineScreenViewModel.State, VaccineScreenViewModel.SideEffect>() {
 
     data class State(
         val vaccinatedFriendsState : LoadState<List<Friend>> = LoadState.Idle(),
@@ -50,6 +53,12 @@ class VaccineScreenViewModel : PlatformViewModel<VaccineScreenViewModel.State, V
                 )
             }
 
+        }
+    }
+
+    fun point(vaccineId : Long, friendsId : Long) {
+        intent {
+            pointApi.point(vaccineId, friendsId)
         }
     }
     

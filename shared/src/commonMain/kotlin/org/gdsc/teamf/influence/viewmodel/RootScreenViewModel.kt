@@ -27,8 +27,8 @@ class RootScreenViewModel(
             meApi.runCatching { me() }.onSuccess {
                 reduce { state.copy(meState = LoadState.Success(it)) }
             }.onFailure {
-//                reduce { state.copy(meState = LoadState.Success(Me.mock)) }
-                reduce { state.copy(meState = LoadState.Error(error = it)) }
+                reduce { state.copy(meState = LoadState.Success(Me.mock)) }
+//                reduce { state.copy(meState = LoadState.Error(error = it)) }
             }
         }
 
