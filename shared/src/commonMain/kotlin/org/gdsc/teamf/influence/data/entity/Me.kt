@@ -38,15 +38,15 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Me(
-    @SerialName("id") val id: Long,
+    @SerialName("userIdx") val id: Long,
     @SerialName("name") val name: String,
     @SerialName("email") val email: String,
-    @SerialName("characterId") val characterId: Long,
-    @SerialName("gender") val gender: Int,
+    @SerialName("image") val characterId: Long,
+    @SerialName("gender") val gender: String,
     @SerialName("age") val age: Int,
-    @SerialName("state") val state: Int,
+    @SerialName("address") val state: Int,
     @SerialName("conditions") val conditions: List<Int>,
-    @SerialName("progress") val progress : Float,
+    @SerialName("myPercent") val progress : Float,
 
     ) {
 
@@ -72,7 +72,7 @@ data class Me(
             id = 0,
             name = "김영훈",
             email = "example@gmail.com",
-            gender = 0,
+            gender = "MALE",
             characterId = 0,
             age = 23,
             state = 0,

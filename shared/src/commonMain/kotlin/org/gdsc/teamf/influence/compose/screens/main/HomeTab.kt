@@ -213,7 +213,7 @@ object HomeTab : Tab {
                         modifier = Modifier.padding(10.dp),
                         vaccine = it,
                         onClick = {
-                            navigator.parent?.push(VaccineScreen(it))
+                            navigator.parent?.push(VaccineScreen(it, state.friendListState.getOrNull().orEmpty()))
                         })
                 }
 
@@ -238,7 +238,7 @@ object HomeTab : Tab {
                     VaccineGridItem(
                         modifier = Modifier.padding(10.dp),
                         vaccine = it, onClick = {
-                            navigator.parent?.push(VaccineScreen(it))
+                            navigator.parent?.push(VaccineScreen(it, state.friendListState.getOrNull().orEmpty()))
                         })
                 }
 
@@ -268,7 +268,7 @@ object HomeTab : Tab {
                                     modifier = Modifier,
                                     vaccine = it1,
                                     onClick = {
-                                        navigator.parent?.push(VaccineScreen(it))
+                                        navigator.parent?.push(VaccineScreen(it, state.friendListState.getOrNull().orEmpty()))
                                     }
                                 )
                             }

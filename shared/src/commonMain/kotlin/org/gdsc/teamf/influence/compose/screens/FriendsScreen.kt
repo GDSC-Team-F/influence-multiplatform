@@ -22,6 +22,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -42,6 +43,9 @@ import org.gdsc.teamf.influence.compose.components.list.FriendListItem
 import org.gdsc.teamf.influence.compose.components.list.SmallHeader
 import org.gdsc.teamf.influence.compose.style.LocalInfluenceColorPalette
 import org.gdsc.teamf.influence.data.Friend
+import org.gdsc.teamf.influence.di.koinViewModel
+import org.gdsc.teamf.influence.utils.collectAsState
+import org.gdsc.teamf.influence.viewmodel.FriendsScreenViewModel
 
 object FriendsScreen : Screen {
 
@@ -49,6 +53,15 @@ object FriendsScreen : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
+
+        val viewModel = koinViewModel<FriendsScreenViewModel>()
+
+        LaunchedEffect(Unit) {
+            viewModel.fetch()
+        }
+
+        val state by viewModel.collectAsState()
+
         Scaffold(
             contentWindowInsets = WindowInsets.systemBars,
             modifier = Modifier,
@@ -136,8 +149,9 @@ object FriendsScreen : Screen {
 
                             Spacer(Modifier.height(20.dp))
 
-
-                            InfluenceCtaButton({}, text = "친구 추가하기")
+                            InfluenceCtaButton({
+                                viewModel.invite(email)
+                            }, text = "친구 추가하기")
                         }
                     }
                     Spacer(Modifier.height(40.dp))
@@ -148,7 +162,7 @@ object FriendsScreen : Screen {
                     Spacer(Modifier.height(20.dp))
                 }
 
-                items(Friend.mock) {
+                items(state.friends.getOrNull().orEmpty()) {
                     FriendListItem(it) {
 
                     }

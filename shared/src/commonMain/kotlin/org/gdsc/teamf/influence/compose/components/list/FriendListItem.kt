@@ -14,11 +14,13 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.unit.dp
 import coil3.compose.rememberAsyncImagePainter
 import org.gdsc.teamf.influence.compose.components.InfluenceCtaButton
@@ -97,11 +99,27 @@ fun FriendListItem(
                     .clip(CircleShape)
             )
             Spacer(Modifier.width(20.dp))
-            Text(
-                text = friend.name,
-                style = InfluenceTypography.title3,
-                modifier = Modifier.fillMaxWidth(),
-            )
+            Column {
+                Text(
+                    text = friend.name,
+                    style = InfluenceTypography.title3,
+                    modifier = Modifier.fillMaxWidth(),
+                )
+                Spacer(Modifier.height(8.dp))
+                LinearProgressIndicator(
+                    progress = friend.progress,
+                    modifier = Modifier.fillMaxWidth(),
+                    color = LocalInfluenceColorPalette.current.green,
+                    trackColor = LocalInfluenceColorPalette.current.adaptiveGray200,
+                    strokeCap = StrokeCap.Round
+                )
+                Spacer(Modifier.height(4.dp))
+                Text(
+                    friend.progressString,
+                    style = InfluenceTypography.body3,
+                    color = LocalInfluenceColorPalette.current.green
+                )
+            }
         }
     }
 

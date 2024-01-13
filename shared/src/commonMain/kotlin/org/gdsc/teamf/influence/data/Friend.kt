@@ -5,11 +5,15 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Friend(
-    @SerialName("id") val id : Long,
+    @SerialName("userId") val id : Long,
     @SerialName("name") val name : String,
-    @SerialName("characterId") val characterId : Int,
-    @SerialName("progress") val progress : Float,
+    @SerialName("image") val characterId : Int,
+    @SerialName("userPercent") val progress : Float,
 ) {
+
+    val progressString : String
+        get() = "${(progress * 10000).toInt() / 100.0}%"
+
 
     // 1 ~ 7
     private val level get() = when ((progress * 100).toInt()) {

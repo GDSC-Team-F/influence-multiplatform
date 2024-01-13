@@ -27,6 +27,7 @@ import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import org.gdsc.teamf.influence.compose.components.InfluenceSurface
 import org.gdsc.teamf.influence.compose.components.list.InfluenceListItem
+import org.gdsc.teamf.influence.compose.screens.LocalMe
 import org.gdsc.teamf.influence.compose.style.InfluenceTypography
 import org.gdsc.teamf.influence.compose.style.LocalInfluenceColorPalette
 import org.gdsc.teamf.influence.data.entity.Me
@@ -45,9 +46,7 @@ object MyPageTab : Tab {
                 )
             }
         ) {
-            val me = remember {
-                Me.mock
-            }
+            val me = LocalMe.current
             Column(modifier = Modifier.padding(it).verticalScroll(rememberScrollState())) {
                 InfluenceSurface(
                     modifier = Modifier.fillMaxWidth().padding(20.dp),
@@ -69,7 +68,7 @@ object MyPageTab : Tab {
 
                         InfluenceListItem(
                             headlineContent = { Text("성별", style = InfluenceTypography.body2) },
-                            supportingContent = { Text(if (me.gender == 0) "남성" else "여성", style = InfluenceTypography.body3) },
+                            supportingContent = { Text(if (me.gender == "MALE") "남성" else "여성", style = InfluenceTypography.body3) },
                         )
 
                         InfluenceListItem(

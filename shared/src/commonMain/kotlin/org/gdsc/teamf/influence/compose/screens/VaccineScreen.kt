@@ -49,13 +49,18 @@ import org.gdsc.teamf.influence.compose.components.list.SmallHeader
 import org.gdsc.teamf.influence.compose.components.list.VaccineListItem
 import org.gdsc.teamf.influence.compose.style.InfluenceTypography
 import org.gdsc.teamf.influence.compose.style.LocalInfluenceColorPalette
+import org.gdsc.teamf.influence.data.Friend
 import org.gdsc.teamf.influence.data.entity.Vaccine
 import org.gdsc.teamf.influence.di.koinViewModel
 import org.gdsc.teamf.influence.utils.collectAsState
+import org.gdsc.teamf.influence.utils.collectSideEffect
 import org.gdsc.teamf.influence.utils.imageResource
 import org.gdsc.teamf.influence.viewmodel.VaccineScreenViewModel
 
-class VaccineScreen(val vaccine: Vaccine) : Screen {
+class VaccineScreen(
+    val vaccine: Vaccine,
+    val friends : List<Friend>
+) : Screen {
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
@@ -69,14 +74,21 @@ class VaccineScreen(val vaccine: Vaccine) : Screen {
 
         val me = LocalMe.current
 
+        viewModel.collectSideEffect {
+            when (it) {
+                is VaccineScreenViewModel.SideEffect.Pop -> {
+                    navigator.pop()
+                }
+            }
+        }
+
         LaunchedEffect(Unit) {
-            viewModel.load()
+            viewModel.load(vaccine, friends)
 
             if (me.conditions.isNotEmpty()) {
                 showWarning = true
             }
         }
-
 
         val topAppBarScrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
@@ -97,17 +109,19 @@ class VaccineScreen(val vaccine: Vaccine) : Screen {
                 }
             },
             bottomBar = {
-                InfluenceSurface {
-                    Box(Modifier.navigationBarsPadding()) {
-                        InfluenceCtaButton(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 20.dp, vertical = 10.dp),
-                            text = "접종했어요!",
-                            onClick = {
-
-                            }
-                        )
+                if (!vaccine.vaccinated) {
+                    InfluenceSurface {
+                        Box(Modifier.navigationBarsPadding()) {
+                            InfluenceCtaButton(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 20.dp, vertical = 10.dp),
+                                text = "접종했어요!",
+                                onClick = {
+                                    viewModel.vaccinated(vaccine.id)
+                                }
+                            )
+                        }
                     }
                 }
             }
@@ -160,37 +174,40 @@ class VaccineScreen(val vaccine: Vaccine) : Screen {
                     Spacer(Modifier.height(20.dp))
                 }
 
-                item {
-                    InfluenceSurface(
-                        modifier = Modifier.fillMaxWidth(),
-                        color = LocalInfluenceColorPalette.current.lightPurple,
-                        shape = androidx.compose.foundation.shape.RoundedCornerShape(20.dp),
-                    ) {
+                vaccine.disease?.let {
 
-                        Column(modifier = Modifier.padding(10.dp)) {
-                            // 설명,예방접종명,접종대상,접종시기
-                            Column(modifier = Modifier.padding(horizontal = 20.dp)) {
-                                Spacer(Modifier.height(20.dp))
-                                Icon(
-                                    imageVector = Icons.Rounded.Coronavirus,
-                                    contentDescription = null,
-                                    tint = LocalInfluenceColorPalette.current.purple,
-                                )
-                                Spacer(Modifier.height(10.dp))
-                                Text(
-                                    text = "왜 접종 해야해요?",
-                                    style = InfluenceTypography.title2,
-                                    color = LocalInfluenceColorPalette.current.purple
+                    item {
+                        InfluenceSurface(
+                            modifier = Modifier.fillMaxWidth(),
+                            color = LocalInfluenceColorPalette.current.lightPurple,
+                            shape = androidx.compose.foundation.shape.RoundedCornerShape(20.dp),
+                        ) {
+
+                            Column(modifier = Modifier.padding(10.dp)) {
+                                // 설명,예방접종명,접종대상,접종시기
+                                Column(modifier = Modifier.padding(horizontal = 20.dp)) {
+                                    Spacer(Modifier.height(20.dp))
+                                    Icon(
+                                        imageVector = Icons.Rounded.Coronavirus,
+                                        contentDescription = null,
+                                        tint = LocalInfluenceColorPalette.current.purple,
+                                    )
+                                    Spacer(Modifier.height(10.dp))
+                                    Text(
+                                        text = "왜 접종 해야해요?",
+                                        style = InfluenceTypography.title2,
+                                        color = LocalInfluenceColorPalette.current.purple
+                                    )
+                                }
+                                InfluenceListItem(
+                                    headlineContent = { Text("${vaccine.disease.name}에 걸릴 수 있어요.", style = InfluenceTypography.title3) },
+                                    supportingContent = { Text(vaccine.disease.description, style = InfluenceTypography.body3) },
                                 )
                             }
-                            InfluenceListItem(
-                                headlineContent = { Text("${vaccine.disease.name}에 걸릴 수 있어요.", style = InfluenceTypography.title3) },
-                                supportingContent = { Text(vaccine.disease.description, style = InfluenceTypography.body3) },
-                            )
-                        }
 
+                        }
+                        Spacer(Modifier.height(20.dp))
                     }
-                    Spacer(Modifier.height(20.dp))
                 }
 
                 item {

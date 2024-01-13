@@ -11,7 +11,7 @@ import kotlinx.serialization.Serializable
 * */
 @Serializable
 data class Point(
-    @SerialName("id") val id : Long,
+    @SerialName("pointId") val id : Long,
     @SerialName("friendsId") val friendsId : Long,
     @SerialName("vaccineId") val vaccineId : Long,
 ) {

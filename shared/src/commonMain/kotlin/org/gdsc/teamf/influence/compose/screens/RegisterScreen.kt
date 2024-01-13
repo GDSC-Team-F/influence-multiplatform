@@ -278,8 +278,8 @@ object RegisterScreen : Screen {
                     Spacer(Modifier.height(20.dp))
                     InfluenceBoarderTextField(
                         modifier = Modifier.fillMaxWidth(),
-                        value = name,
-                        onValueChange = { name = it },
+                        value = email,
+                        onValueChange = { email = it },
                         placeholder = { Text("***@email.com") },
                     )
                     Spacer(Modifier.height(20.dp))

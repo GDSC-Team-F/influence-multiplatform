@@ -36,7 +36,7 @@ internal fun <T : HttpClientEngineConfig> ApiHttpClient(
     engineFactory: HttpClientEngineFactory<T>,
     block: HttpClientConfig<T>.() -> Unit = {},
 ) = HttpClient(engineFactory) {
-    val apiUrl = ""
+    val apiUrl = "35.216.112.80:8080"
 
     expectSuccess = true
 
@@ -56,6 +56,8 @@ internal fun <T : HttpClientEngineConfig> ApiHttpClient(
                 val accessToken = apiHelper.accessToken()
                 val refreshToken = apiHelper.refreshToken()
 
+                println("⚡️ accessToken: $accessToken")
+                println("⚡️ refreshToken: $refreshToken")
                 if (accessToken != null && refreshToken != null) BearerTokens(accessToken, refreshToken)
                 else null
             }
@@ -105,7 +107,7 @@ internal fun <T : HttpClientEngineConfig> ApiHttpClient(
         }
 
         url {
-            protocol = URLProtocol.HTTPS
+            protocol = URLProtocol.HTTP
             host = apiUrl
         }
     }

@@ -47,45 +47,34 @@ class HomeTabViewModel(
         intent {
             val vaccines = vaccineApi.runCatching { vaccine() }
                 .onSuccess { reduce { state.copy(myVaccineListState = LoadState.Success(it)) } }
-                .onFailure {
-                    reduce { state.copy(myVaccineListState = LoadState.Success(Vaccine.mockList)) }
-//                    reduce { state.copy(myVaccineListState = LoadState.Error(error = it)) }
-                }
+                .onFailure { reduce { state.copy(myVaccineListState = LoadState.Error(error = it)) } }
                 .getOrNull() ?: Vaccine.mockList
 
             val friends = friendApi.runCatching { friends() }
                 .onSuccess { reduce { state.copy(friendListState = LoadState.Success(it)) } }
-                .onFailure {
-                    reduce { state.copy(friendListState = LoadState.Success(Friend.mock)) }
-//                    reduce { state.copy(friendListState = LoadState.Error(error = it)) }
-                }.getOrNull() ?: Friend.mock
+                .onFailure { reduce { state.copy(friendListState = LoadState.Error(error = it)) } }
+                .getOrNull() ?: Friend.mock
 
-            pointApi.runCatching { point() }
+            pointApi.runCatching { get() }
                 .map {
+                    val firstItem = it.firstOrNull() ?: return@map null
                     PointedFriendData(
-                        friend = friends.firstOrNull { friend -> friend.id == it.friendsId },
-                        vaccine = vaccines.firstOrNull { vaccine -> vaccine.id == it.vaccineId },
+                        friend = friends.firstOrNull { friend -> friend.id == firstItem.friendsId },
+                        vaccine = vaccines.firstOrNull { vaccine -> vaccine.id == firstItem.vaccineId },
                     )
                 }
-                .onSuccess { postSideEffect(SideEffect.ShowPointedFriend(it)) }
+                .onSuccess {
+                    if (it != null) postSideEffect(SideEffect.ShowPointedFriend(it))
+                }
                 .onFailure {
-                    val pointMock = Point.mock
-                    postSideEffect(
-                        SideEffect.ShowPointedFriend(
-                            PointedFriendData(
-                                friend = friends.firstOrNull { friend -> friend.id == pointMock.friendsId },
-                                vaccine = vaccines.firstOrNull { vaccine -> vaccine.id == pointMock.vaccineId },
-                            )
-                        )
-                    )
-//                reduce { state.copy(pointState = LoadState.Error(error = it)) }
+                    it.printStackTrace()
                 }
         }
     }
 
     fun revokePoint(id: Long) {
         intent {
-            pointApi.runCatching { point(id) }
+            pointApi.runCatching { delete(id) }
                 .onSuccess { load() }
         }
     }

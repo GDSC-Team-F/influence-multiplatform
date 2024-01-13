@@ -120,10 +120,13 @@ HIV 감염증
 - 노출 후 : 역학조사 결과 관리대상 접촉자"	4주 간격, 2회* 접종
 * */
 
+//"description": "string",
+//"diseaseIdx": 0,
+//"diseaseName": "string"
 @Serializable
 data class Diseases(
-    @SerialName("id") val id: Long,
-    @SerialName("name") val name: String,
+    @SerialName("diseaseIdx") val id: Long,
+    @SerialName("diseaseName") val name: String,
     @SerialName("description") val description: String,
 ) {
 
@@ -210,16 +213,30 @@ data class Diseases(
     }
 }
 
+/*
+      "disease": {
+        "description": "string",
+        "diseaseIdx": 0,
+        "diseaseName": "string"
+      },
+      "friendsInjected": "string",
+      "friendsNotInjected": "string",
+      "injectionCycle": "string",
+      "injectionIdx": 0,
+      "injectionName": "string",
+      "injectionPeriod": "string",
+      "isInjected": true
+* */
 @Serializable
 data class Vaccine(
-    @SerialName("id") val id: Long,
-    @SerialName("name") val name: String,
-    @SerialName("disease") val disease: Diseases,
-    @SerialName("vaccinationTarget") val vaccinationTarget: String,
-    @SerialName("vaccinationPeriod") val vaccinationPeriod: String,
-    @SerialName("vaccinatedFriends") val vaccinatedFriends: List<Long>,
-    @SerialName("notVaccinatedFriends") val notVaccinatedFriends: List<Long>,
-    @SerialName("vaccinated") val vaccinated: Boolean,
+    @SerialName("injectionIdx") val id: Long,
+    @SerialName("injectionName") val name: String,
+    @SerialName("disease") val disease: Diseases?,
+    @SerialName("injectionCycle") val vaccinationTarget: String,
+    @SerialName("injectionPeriod") val vaccinationPeriod: String,
+    @SerialName("friendsInjected") val vaccinatedFriends: List<Long>,
+    @SerialName("friendsNotInjected") val notVaccinatedFriends: List<Long>,
+    @SerialName("isInjected") val vaccinated: Boolean,
 ) {
 
     val progress : Float
