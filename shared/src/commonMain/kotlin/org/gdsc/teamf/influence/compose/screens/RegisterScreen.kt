@@ -109,10 +109,10 @@ object RegisterScreen : Screen {
                                     password,
                                     name,
                                     selectedConditions,
-                                    livingState!!,
-                                    0,
-                                    0,
-                                    0,
+                                    livingState,
+                                    gender,
+                                    age,
+                                    characterId
                                 )
                             }
                         )

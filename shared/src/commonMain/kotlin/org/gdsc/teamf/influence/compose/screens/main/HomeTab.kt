@@ -172,7 +172,7 @@ object HomeTab : Tab {
                                 Spacer(Modifier.width(20.dp))
                                 Column {
                                     Text(
-                                        text = "${(me.progress * 10000).roundToInt() / 100.0}%",
+                                        text = "${(me.progress * 100).roundToInt() / 100.0}%",
                                         style = InfluenceTypography.heading1,
                                         color = LocalInfluenceColorPalette.current.green
                                     )
@@ -188,7 +188,7 @@ object HomeTab : Tab {
                             Spacer(Modifier.height(20.dp))
 
                             LinearProgressIndicator(
-                                progress = me.progress,
+                                progress = me.progress / 100f,
                                 modifier = Modifier.fillMaxWidth().height(20.dp),
                                 color = LocalInfluenceColorPalette.current.green,
                                 trackColor = Color.White.copy(alpha = 0.2f),

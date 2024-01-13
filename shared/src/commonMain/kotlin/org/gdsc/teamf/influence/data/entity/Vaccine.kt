@@ -240,7 +240,7 @@ data class Vaccine(
 ) {
 
     val progress : Float
-        get() = vaccinatedFriends.size.toFloat() / (vaccinatedFriends.size + notVaccinatedFriends.size).toFloat()
+        get() = (vaccinatedFriends.size + if (vaccinated) 1 else 0).toFloat() / (1 + vaccinatedFriends.size + notVaccinatedFriends.size).toFloat()
 
     val progressString : String
         get() = "${(progress * 10000).toInt() / 100.0}%"

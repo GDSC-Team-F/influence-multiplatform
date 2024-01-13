@@ -45,6 +45,7 @@ import org.gdsc.teamf.influence.compose.style.LocalInfluenceColorPalette
 import org.gdsc.teamf.influence.data.Friend
 import org.gdsc.teamf.influence.di.koinViewModel
 import org.gdsc.teamf.influence.utils.collectAsState
+import org.gdsc.teamf.influence.utils.collectSideEffect
 import org.gdsc.teamf.influence.viewmodel.FriendsScreenViewModel
 
 object FriendsScreen : Screen {
@@ -58,6 +59,12 @@ object FriendsScreen : Screen {
 
         LaunchedEffect(Unit) {
             viewModel.fetch()
+        }
+
+        viewModel.collectSideEffect {
+            if (it == FriendsScreenViewModel.SideEffect.InviteSucceed) {
+                viewModel.fetch()
+            }
         }
 
         val state by viewModel.collectAsState()
